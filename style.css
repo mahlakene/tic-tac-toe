@@ -1,22 +1,157 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:100,300,400');
+@import url('https://fonts.googleapis.com/css?family=Roboto:100');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: auto
+}
+
+html, body {
+    height: 100%;
+}
+
 body {
     font-family: Arial, sans-serif;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: slategrey;
+    overflow: auto; /* Allows scrolling when the content is too big */
+    width: 100%;
+    position: relative;
 }
 
 .welcome-text {
+    width: 50%; /* Default width for larger screens */
+    font-size: 8vh;
+    color: white;
     text-align: center;
     margin-bottom: 10vh;
+    margin-top: 15vh;
+    font-family: "Century Gothic", serif;
+}
+
+.logo {
+    height: 2em; /* Keeps the logo size consistent with the text */
+    vertical-align: middle;
+}
+
+.button-container {
+    position: relative;
+    width: 20%;
+    height: 15%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 6vh;
+    overflow: hidden;
+    font-family: "Lato", sans-serif;
+    font-weight: 300;
+    font-size: 5vh;
+    transition: 0.5s;
+    letter-spacing: 1px;
+    border: 2px solid #ffffff;
+    border-radius: 8vh;
+}
+
+.button-container button {
+
+    width: 100%;
+    height: 100%;
+    font-family: "Lato", sans-serif;
+    font-size: 5vh;
+    padding: 1vh 2vh;
+    overflow: hidden;
+    border-radius: 3.5vh;
+
+    letter-spacing: 1px;
+    font-weight: bold;
+    background: #000;
+    -webkit-mask: url("https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/nature-sprite.png");
+    mask: url("https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/nature-sprite.png");
+    -webkit-mask-size: 2300% 100%;
+    mask-size: 2300% 100%;
+    color: #fff;
+    cursor: pointer;
+    -webkit-animation: ani2 0.7s steps(22) forwards;
+    animation: ani2 0.7s steps(22) forwards;
+}
+.button-container button:hover {
+    -webkit-animation: ani 0.7s steps(22) forwards;
+    animation: ani 0.7s steps(22) forwards;
+}
+
+.mas {
+    position: absolute;
+    margin-top: 4.3vh;
+    color: #000;
+    text-align: center;
+    width: 100%;
+    font-family: "Lato", sans-serif;
+    font-size: 5vh;
+    overflow: hidden;
+    font-weight: bold;
+}
+
+@-webkit-keyframes ani {
+    from {
+        -webkit-mask-position: 0 0;
+        mask-position: 0 0;
+    }
+    to {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+    }
+}
+@keyframes ani {
+    from {
+        -webkit-mask-position: 0 0;
+        mask-position: 0 0;
+    }
+    to {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+    }
+}
+@-webkit-keyframes ani2 {
+    from {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+    }
+    to {
+        -webkit-mask-position: 0 0;
+        mask-position: 0 0;
+    }
+}
+@keyframes ani2 {
+    from {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+    }
+    to {
+        -webkit-mask-position: 0 0;
+        mask-position: 0 0;
+    }
+}
+
+
+.welcome-text2 {
+    text-align: center;
+    margin-bottom: 10vh;
+    margin-top: 15vh;
 }
 
 .whole-grid {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    overflow: auto
 }
 
 .grid-container {
@@ -24,6 +159,7 @@ body {
     grid-template-columns: repeat(3, 18vh);
     grid-template-rows: repeat(3, 18vh);
     gap: 2vh;
+    justify-content: center;
 }
 
 .grid-item {
@@ -32,6 +168,55 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
-    border-radius: 5px;
+    font-size: 10vh;
+    border-radius: 2vh;
+}
+
+aside {
+    position: absolute; /* Allows positioning relative to the nearest positioned ancestor */
+    top: 10%;
+    z-index: -10; /* Ensures the image appears behind other elements */
+    display: inline-table;
+    width: 30%;
+    height: calc(100% - 10%);
+    overflow: hidden;
+}
+
+#left-aside {
+    left: 3vh;
+}
+
+#right-aside {
+    right: 3vh;
+}
+
+.side-image {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+}
+
+/* OPTIONS PAGE */
+.options-text {
+    display: flex;
+    text-align: right;
+}
+
+/* Media query for smaller devices */
+@media (max-width: 575px) {
+
+    .welcome-text {
+        width: 40%;
+        font-size: 4vh;
+        margin-top: 2vh;
+        margin-bottom: 50vh;
+    }
+    aside {
+        top: 25%;
+    }
+    .button-container {
+        width: 50%;
+    }
+
 }
