@@ -16,14 +16,24 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     margin: 0;
     background-color: slategrey;
     overflow: auto; /* Allows scrolling when the content is too big */
     width: 100%;
     position: relative;
 }
+
+.body1 {
+    justify-content: center;
+    align-items: center;
+}
+
+.body2 {
+    align-items: center;
+    overflow: hidden;
+    margin-top: 0vh;
+}
+
 
 .welcome-text {
     width: 50%; /* Default width for larger screens */
@@ -197,10 +207,50 @@ aside {
     top: 0;
 }
 
-/* OPTIONS PAGE */
-.options-text {
+
+/* Container for the options */
+.options-container {
+    margin-top: 16vh;
+    text-align: center;
+}
+
+/* Title styling */
+.options-title {
+    margin-bottom: 5vh;
+    font-size: 6vh;
+    color: #333;
+}
+
+/* Container for the buttons */
+.button-group {
     display: flex;
-    text-align: right;
+    gap: 2vh;
+}
+
+/* Button styling */
+.option-button {
+    padding: 2vh 5vh;
+    font-size: 3vh;
+    border: 2px solid #333;
+    border-radius: 1vh;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.option-button:hover {
+    background-color: #333;
+    color: #fff;
+    border-color: #fff;
+}
+
+/* Active state styling */
+.option-button.active {
+    background-color: #333;
+    color: #fff;
+    border: 2px solid #ffcc00; /* Optional: Different border color for active state */
 }
 
 /* Media query for smaller devices */

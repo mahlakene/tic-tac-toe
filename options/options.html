@@ -6,13 +6,17 @@
     <title>Tic-Tac-Toe</title>
     <link rel="stylesheet" href="../style.css">
 </head>
-<body>
-    <div class="options-text">
-        Options
+<body class="body2">
+    <div class="options-container">
+        <h1 class="options-title">Choose Game Mode</h1>
+        <div class="button-group">
+            <button class="option-button" id="single-player" onclick="setActive('single-player')">Single Player</button>
+            <button class="option-button" id="two-player" onclick="setActive('two-player')">Two Player</button>
+        </div>
     </div>
-
-    <div class="button">
-        <a href="">
+    <div class="button-container" style="margin-top: 40vh">
+        <a href="../board/board.html">
+            <span class="mas">Let's play!</span>
             <button class="button">Let's play!</button>
         </a>
     </div>
@@ -22,5 +26,6 @@
     <aside id="right-aside">
         <img src="../assets/lewis.png" alt="Right-side image" class="side-image">
     </aside>
+    <script src="../scripts.js"></script>
 </body>
 </html>
