@@ -180,6 +180,9 @@ body {
     align-items: center;
     font-size: 10vh;
     border-radius: 2vh;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
 }
 
 aside {

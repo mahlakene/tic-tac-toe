@@ -10,3 +10,12 @@ function setActive(buttonId) {
     }
     /*window.location.href = '../board/board.html';*/
 }
+
+
+const buttons = document.querySelectorAll('.grid-item');
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        console.log(button);
+        button.style.backgroundImage = 'url("../assets/max-square.png")';
+    });
+});
