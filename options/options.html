@@ -7,18 +7,34 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="body2">
-    <div class="options-container">
-        <h1 class="options-title">Choose Game Mode</h1>
-        <div class="button-group">
-            <button class="option-button" id="single-player" onclick="setActive('single-player')">Single Player</button>
-            <button class="option-button" id="two-player" onclick="setActive('two-player')">Two Player</button>
+    <div class="layout-container">
+        <div class="options-container">
+            <h1 class="options-title">Choose Game Mode</h1>
+            <div class="button-group">
+                <button class="option-button" id="single-player" onclick="setActive('single-player')">Single Player</button>
+                <button class="option-button" id="two-player" onclick="setActive('two-player')">Two Player</button>
+            </div>
         </div>
-    </div>
-    <div class="button-container" style="margin-top: 35vh">
-        <a href="../board/board.html">
-            <span class="mas">Let's play!</span>
-            <button class="button">Let's play!</button>
-        </a>
+
+        <div style="height: 50vh">
+            <div class="input-group">
+                <h1 class="options-title" style="font-size: 4vh">Enter Player 1 name</h1>
+                <label for="player1-name"></label>
+                <input type="text" id="player1-name" placeholder="Player 1">
+            </div>
+            <div class="input-group" id="player2-input" >
+                <h1 class="options-title" style="font-size: 4vh">Enter Player 2 name</h1>
+                <label for="player2-name"></label>
+                <input type="text" id="player2-name" placeholder="Player 2">
+            </div>
+        </div>
+
+        <div class="button-container">
+            <a href="../board/board.html" >
+                <span class="mas" >Let's play!</span>
+                <button class="button" id="play-button">Let's play!</button>
+            </a>
+        </div>
     </div>
     <aside id="left-aside">
         <img src="../assets/max.png" alt="Left-side image" class="side-image">

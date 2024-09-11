@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="whole-grid">
-    <div class="welcome-text2">Choose a square!</div>
+    <div class="board-text">Choose a square!</div>
 
     <div class="grid-container">
         <button class="grid-item" id="square1"></button>
@@ -20,6 +20,12 @@
         <button class="grid-item" id="square7"></button>
         <button class="grid-item" id="square8"></button>
         <button class="grid-item" id="square9"></button>
+    </div>
+    <div id="winnerModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="winnerMessage">Player X has won!</p>
+        </div>
     </div>
     <aside id="left-aside">
         <img src="../assets/max.png" alt="Left-side image" class="side-image">
