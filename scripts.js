@@ -21,7 +21,6 @@ function setActive(buttonId) {
 
 document.addEventListener('DOMContentLoaded', function () {
     const playButton = document.getElementById('play-button');
-    const randomString = '';
     if (playButton) {
         playButton.addEventListener('click', function (event) {
             event.preventDefault();
@@ -43,11 +42,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
         });
     } else {
-        const randomString = Math.random() < 0.5 ? sessionStorage.getItem('player1Name') :
-            sessionStorage.getItem('player2Name');
-        sessionStorage.setItem('playerNameToMove', randomString)
-        const boardText = document.querySelector(".board-text");
-        boardText.textContent = `Player ${randomString}, choose a square!`;
+        if (sessionStorage.getItem('startingPlayer') === null) {
+            const randomString = Math.random() < 0.5 ? sessionStorage.getItem('player1Name') :
+                sessionStorage.getItem('player2Name');
+            sessionStorage.setItem('playerNameToMove', randomString)
+            sessionStorage.setItem('startingPlayer', randomString);
+            const boardText = document.querySelector(".board-text");
+            boardText.textContent = `Player ${randomString}, choose a square!`;
+            // Check if AI is the starting player and make the first move
+            if (sessionStorage.getItem('gameMode') === 'single' && sessionStorage.getItem('startingPlayer') === 'Bot Michael') {
+                setTimeout(aiMove, 500); // Delay AI move slightly for a better user experience
+                sessionStorage.setItem('playerNameToMove', sessionStorage.getItem('player1Name'))
+            }
+        }
     }
 });
 
@@ -61,6 +68,13 @@ buttons.forEach(button => {
     button.addEventListener('click', () => {
         const player = sessionStorage.getItem('playerToMove');
         const playerName = sessionStorage.getItem('playerNameToMove');
+
+        // Prevent consecutive moves: Check if it's the correct player's turn
+        if ((sessionStorage.getItem('gameMode') === 'single' && playerName === 'Bot Michael') ||
+            (sessionStorage.getItem('gameMode') === 'two' && playerName !== sessionStorage.getItem('player1Name') && playerName !== sessionStorage.getItem('player2Name'))) {
+            return; // Ignore clicks if it's not the correct player's turn
+        }
+
         if (!sessionStorage.getItem(button.id)) {
             button.style.backgroundImage = `url("../assets/${player}-square.png")`;
             sessionStorage.setItem(button.id, player)
@@ -69,15 +83,65 @@ buttons.forEach(button => {
             showWinnerPopup(playerName)
             return 'game over';
         }
+        if (checkDraw()) {
+            showDrawPopup();
+            return 'game over';
+        }
 
-        sessionStorage.setItem('playerToMove', player === 'max' ? 'lewis' : 'max');
-        const boardText = document.querySelector(".board-text");
-        const nextMove = playerName === sessionStorage.getItem('player1Name')
-            ? sessionStorage.getItem('player2Name') : sessionStorage.getItem('player1Name');
-        sessionStorage.setItem('playerNameToMove', nextMove)
-        boardText.textContent = `Player ${nextMove}, choose a square!`;
+        // Change turns: If it's single-player mode, let AI play after the player
+        if (sessionStorage.getItem('gameMode') === 'single') {
+            sessionStorage.setItem('playerToMove', 'max');
+            const boardText = document.querySelector(".board-text");
+            boardText.textContent = `Bot Michael is making a move...`;
+            setTimeout(aiMove, 1000); // Delay AI move slightly for a better user experience
+        } else {
+            // In two-player mode, switch the turn to the other player
+            const nextMove = playerName === sessionStorage.getItem('player1Name')
+                ? sessionStorage.getItem('player2Name') : sessionStorage.getItem('player1Name');
+            sessionStorage.setItem('playerNameToMove', nextMove);
+            sessionStorage.setItem('playerToMove', player === 'max' ? 'lewis' : 'max');
+            const boardText = document.querySelector(".board-text");
+            boardText.textContent = `Player ${nextMove}, choose a square!`;
+        }
     });
 });
+
+/**
+ * Make a move for the AI in single-player mode.
+ */
+function aiMove() {
+    const availableSquares = [];
+    const squares = ['square1', 'square2', 'square3', 'square4', 'square5', 'square6',
+        'square7', 'square8', 'square9'];
+
+    squares.forEach(square => {
+        if (!sessionStorage.getItem(square)) {
+            availableSquares.push(square);
+        }
+    });
+    if (availableSquares.length === 0) return;
+
+    const randomIndex = Math.floor(Math.random() * availableSquares.length);
+    const chosenSquare = availableSquares[randomIndex];
+    const button = document.getElementById(chosenSquare);
+
+    const aiPlayer = 'max'; // You can change this to AI’s identifier (e.g., 'max')
+    button.style.backgroundImage = `url("../assets/${aiPlayer}-square.png")`;
+    sessionStorage.setItem(chosenSquare, aiPlayer);
+
+    if (checkWin()) {
+        showWinnerPopup('Bot Michael'); // Assuming the AI is named 'Bot Michael'
+        return 'game over';
+    }
+    if (checkDraw()) {
+        showDrawPopup();
+        return 'game over';
+    }
+
+    sessionStorage.setItem('playerToMove', 'lewis'); // Set to player's turn
+    const boardText = document.querySelector(".board-text");
+    boardText.textContent = `Player ${sessionStorage.getItem('player1Name')}, choose a square!`;
+}
 
 /**
  * Clear board when refreshing/loading a page.
@@ -86,11 +150,40 @@ window.addEventListener('load', function() {
     clearData()
 });
 
+/**
+ * Clear the game data to start the new game from an empty board.
+ */
 function clearData() {
     for (const square of ['square1', 'square2', 'square3', 'square4', 'square5', 'square6',
         'square7', 'square8', 'square9']) {
         sessionStorage.removeItem(square);
     }
+    const playerToMove = sessionStorage.getItem('startingPlayer') === sessionStorage.getItem('player1Name') ?
+        sessionStorage.getItem('player2Name') : sessionStorage.getItem('player1Name');
+    sessionStorage.setItem('startingPlayer', playerToMove);
+    sessionStorage.setItem('playerNameToMove', playerToMove);
+    const boardText = document.querySelector(".board-text");
+    boardText.textContent = `Player ${playerToMove}, choose a square!`;
+
+    // Check if AI is the starting player and make the first move
+    if (sessionStorage.getItem('gameMode') === 'single' && playerToMove === 'Bot Michael') {
+        setTimeout(aiMove, 100); // Delay AI move slightly for a better user experience
+        sessionStorage.setItem('playerNameToMove', sessionStorage.getItem('player1Name'))
+    }
+}
+
+/**
+ * Check if the game has ended in a draw (check if all squares have been placed).
+ * @returns {boolean}
+ */
+function checkDraw() {
+    const squares = ['square1', 'square2', 'square3', 'square4', 'square5', 'square6', 'square7', 'square8', 'square9', ]
+    for (const square of squares) {
+        if (sessionStorage.getItem(square) === null) {
+            return false;
+        }
+    }
+    return true;
 }
 
 /**
@@ -112,22 +205,61 @@ function checkWin() {
         if (sessionStorage.getItem(combination.at(0)) !== null &&
             sessionStorage.getItem(combination.at(0)) === sessionStorage.getItem(combination.at(1))
             && sessionStorage.getItem(combination.at(1)) === sessionStorage.getItem(combination.at(2))) {
-            clearData();
-            //alert("Game over.")
             return true;
         }
     }
     return false;
 }
 
+/**
+ * Show winner popup if someone has won.
+ * @param winner
+ */
 function showWinnerPopup(winner) {
-    const modal = document.getElementById('winnerModal');
     const winnerMessage = document.getElementById('winnerMessage');
     winnerMessage.textContent = `Player ${winner} has won!`;
+    showPopup();
+}
+
+/**
+ * Show draw popup if the game has ended in a draw.
+ */
+function showDrawPopup() {
+    const winnerMessage = document.getElementById('winnerMessage');
+    winnerMessage.textContent = `The game has ended in a draw.`;
+    showPopup();
+}
+
+/**
+ * Popup to be showed at the end of the game.
+ * It offers to play again or exit to the open page.
+ */
+function showPopup() {
+    const modal = document.getElementById('winnerModal');
     modal.style.display = 'block';
 
-    // Add event listener to close the modal when the "x" is clicked
+    // Add event listener to close the modal when the "X" is clicked
     document.querySelector('.close').addEventListener('click', function() {
-        document.getElementById('winnerModal').style.display = 'none';
+        modal.style.display = 'none';
+    });
+
+    const playAgainButton = document.getElementById('playAgainButton');
+    playAgainButton.addEventListener('click', function () {
+        modal.style.display = 'none';
+        console.log('Play Again clicked! Restarting game...');
+        //clearData()
+        const boardText = document.querySelector(".board-text");
+        window.location.reload();
+        boardText.textContent = `Player ${sessionStorage.getItem('startingPlayer')}, choose a square!`;
+    });
+
+    // Add event listener for the Exit button
+    const exitButton = document.getElementById('exitButton');
+    exitButton.addEventListener('click', function () {
+        modal.style.display = 'none';
+        console.log('Exit clicked! Exiting game...');
+        sessionStorage.clear();
+        window.location.href = '../index.html';
     });
 }
+

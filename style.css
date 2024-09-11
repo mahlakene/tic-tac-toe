@@ -305,12 +305,31 @@ input[type="text"] {
 }
 
 .modal-content {
-    background-color: white;
+    background-color: darkslategray;
     margin: 15% auto;
-    padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    height: 20%;
     text-align: center;
+    border-radius: 2vh;
+}
+
+.end-message {
+    font-size: 6vh;
+    margin-bottom: 5vh;
+}
+
+.modal-buttons {
+    font-size: 10vh;
+    display: flex;
+    justify-content: center;
+}
+
+.modal-button {
+    font-size: 4vh;
+    width: 30%;
+    border-radius: 3vh;
+    cursor: pointer;
 }
 
 .close {
@@ -344,5 +363,14 @@ input[type="text"] {
     }
     .options-title {
         color: white;
+    }
+    .modal-content {
+        height: 30%;
+    }
+    .modal-button {
+        width: 40%;
+    }
+    .end-message {
+        font-size: 5vh;
     }
 }
